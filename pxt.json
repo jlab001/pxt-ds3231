@@ -1,14 +1,18 @@
 {
-    "name": "DS3231",
+    "name": "Grove",
     "version": "0.1.0",
-    "description": "Package for DS3231 real-time clock module developed by Jack Ho et al. of Marshall Cavendish Education (HK)",
+    "description": "A Microsoft MakeCode package for Seeed Studio Grove module",
     "license": "MIT",
     "dependencies": {
         "core": "*"
     },
     "files": [
         "README.md",
-        "main.ts"
+        "main.ts",
+        "_locales/ja/Grove-strings.json"
+    ],
+    "testFiles": [
+        "test.ts"
     ],
     "public": true
 }
