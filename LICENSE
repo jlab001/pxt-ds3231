@@ -1,5 +1,5 @@
 # DS3231
-Package for DS3231 real-time clock module developed by Jack Ho et al. of Marshall Cavendish Education (HK)
+A Microsoft MakeCode package for for DS3231 module.
 
 ## Basic usage
 Use the block to get current time or date.
