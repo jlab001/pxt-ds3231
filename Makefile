@@ -5,6 +5,3 @@ build:
 
 deploy:
 	pxt deploy
-
-test:
-	pxt test
