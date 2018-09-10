@@ -1,10 +1,7 @@
 /*
-Copyright 2018 Jack Ho, Parco Choi, Sang Lo (MCEHK)
-
+Copyright 2018 Jack Ho, Parco Choi, Yu Sang Lo
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
 
 let ss = 0
@@ -14,9 +11,10 @@ let dd = 0
 let mth = 0
 let yyyy = 0
 let buf = pins.createBuffer(7)
+let setbuf = pins.createBuffer(2)
 let value = 0
 
-enum MyEnum {
+enum RTCEnum {
     //% block="Second"
     Second,
     //% block="Minute"
@@ -40,7 +38,7 @@ namespace DS3231 {
      */
     //% blockId=realtimeclock block="Get|current %e"
     //% weight=87
-    export function GetDayTime(e: MyEnum): number {
+    export function GetDayTime(e: RTCEnum): number {
 
         if (e == 0) {
             pins.i2cWriteNumber(
@@ -120,4 +118,51 @@ namespace DS3231 {
 
         return value
     }
-}
+    /**
+     * Set the current time / date
+     * @param Set the day / month / hour / minute / second 
+     * 
+     */
+    //% blockId=settime block="Set current Hour:%h|Minute:%m|Second:%s|Day:%d|Month:%mth|Year:%yr|"
+    //% weight=87
+    export function SetDateTime(h: number, m: number, s: number, d: number, mth: number, yr: number): void {
+
+
+        //pins.i2cWriteNumber(104, 0, NumberFormat.Int8LE)
+
+        setbuf.setNumber(NumberFormat.Int8LE, 0, 0)
+        setbuf.setNumber(NumberFormat.Int8LE, 1, decToBCD(s))
+        pins.i2cWriteBuffer(104, setbuf, false)
+
+        setbuf.setNumber(NumberFormat.Int8LE, 0, 1)
+        setbuf.setNumber(NumberFormat.Int8LE, 1, decToBCD(m))
+        pins.i2cWriteBuffer(104, setbuf, false)
+
+        setbuf.setNumber(NumberFormat.Int8LE, 0, 2)
+        setbuf.setNumber(NumberFormat.Int8LE, 1, decToBCD(h))
+        pins.i2cWriteBuffer(104, setbuf, false)
+
+        setbuf.setNumber(NumberFormat.Int8LE, 0, 3)
+        setbuf.setNumber(NumberFormat.Int8LE, 1, decToBCD(1))
+        pins.i2cWriteBuffer(104, setbuf, false)
+
+        setbuf.setNumber(NumberFormat.Int8LE, 0, 4)
+        setbuf.setNumber(NumberFormat.Int8LE, 1, decToBCD(d))
+        pins.i2cWriteBuffer(104, setbuf, false)
+
+        setbuf.setNumber(NumberFormat.Int8LE, 0, 5)
+        setbuf.setNumber(NumberFormat.Int8LE, 1, decToBCD(mth))
+        pins.i2cWriteBuffer(104, setbuf, false)
+
+        setbuf.setNumber(NumberFormat.Int8LE, 0, 6)
+        setbuf.setNumber(NumberFormat.Int8LE, 1, decToBCD(yr - 2000))
+        pins.i2cWriteBuffer(104, setbuf, false)
+    }
+
+    function decToBCD(dec: number): number {
+        let tens = (dec - (dec % 10)) / 10
+        let units = dec % 10
+        return (tens << 4) + units
+    }
+
+} 
