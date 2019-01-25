@@ -159,10 +159,51 @@ namespace DS3231 {
         pins.i2cWriteBuffer(104, setbuf, false)
     }
 
+    /**
+     * Get the current time (in string)
+     * @param Get the day / month / hour / minute / second 
+     * 
+     */
+    //% blockId=getcurrtime block="Get current time in text"
+    //% weight=87
+    export function GetTime(): string {
+
+        let value = pad(DS3231.GetDayTime(RTCEnum.Hour).toString(), 2)
+        value += ":"
+        value += pad(DS3231.GetDayTime(RTCEnum.Minute).toString(), 2)
+        value += ":"
+        value += pad(DS3231.GetDayTime(RTCEnum.Second).toString(), 2)
+        return value
+    }
+
+    /**
+     * Get the current date in string
+     * @param Get the day / month / hour / minute / second 
+     * 
+     */
+    //% blockId=getcurrdate block="Get current date in text"
+    //% weight=87
+    export function GetDate(): string {
+
+        let value = pad(DS3231.GetDayTime(RTCEnum.Day).toString(),2)
+        value += "/"
+        value += pad(DS3231.GetDayTime(RTCEnum.Month).toString(),2)
+        value += "/"
+        value += pad(DS3231.GetDayTime(RTCEnum.Year).toString(),2)
+        return value
+    }
+
+
+
     function decToBCD(dec: number): number {
         let tens = (dec - (dec % 10)) / 10
         let units = dec % 10
         return (tens << 4) + units
+    }
+
+    function pad(str: string, max: number): string {
+        return str.length < max ? pad("0" + str, max) : str;
+
     }
 
 } 
