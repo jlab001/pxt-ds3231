@@ -185,13 +185,78 @@ namespace DS3231 {
     //% weight=87
     export function GetDate(): string {
 
-        let value = pad(DS3231.GetDayTime(RTCEnum.Day).toString(),2)
+        let value = pad(DS3231.GetDayTime(RTCEnum.Day).toString(), 2)
         value += "/"
-        value += pad(DS3231.GetDayTime(RTCEnum.Month).toString(),2)
+        value += pad(DS3231.GetDayTime(RTCEnum.Month).toString(), 2)
         value += "/"
-        value += pad(DS3231.GetDayTime(RTCEnum.Year).toString(),2)
+        value += pad(DS3231.GetDayTime(RTCEnum.Year).toString(), 2)
         return value
     }
+
+    /**
+     * Check if the current time is as the specified time (hh:mm)
+     * @param Check if the current time is as the specified time (hh:mm)
+     * 
+     */
+    //% blockId=checkhhmm block="Is now H: %hh|,M:%mm|,S:00?"
+    //% weight=87
+    export function CheckTimeHHMM(hh: number, mm: number): boolean {
+        if (DS3231.GetDayTime(RTCEnum.Second) == 0) {
+            if ((DS3231.GetDayTime(RTCEnum.Hour) == hh) && (DS3231.GetDayTime(RTCEnum.Minute) == mm)) {
+                return true
+            }
+            else {
+                return false
+            }
+        }
+        else {
+            return false
+        }
+    }
+
+    /**
+     * Check if the current time is as the specified time (mm)
+     * @param Check if the current time is as the specified time (mm)
+     * 
+     */
+    //% blockId=checkmm block="Is now M:%mm|,S:00?"
+    //% weight=87
+    export function CheckTimeMM(mm: number): boolean {
+        if (DS3231.GetDayTime(RTCEnum.Second) == 0) {
+            if (DS3231.GetDayTime(RTCEnum.Minute) == mm) {
+                return true
+            }
+            else {
+                return false
+            }
+        }
+        else {
+            return false
+        }
+    }
+
+
+    /**
+     * Check if the current time is as the specified time (hh)
+     * @param Check if the current time is as the specified time (hh)
+     * 
+     */
+    //% blockId=checkhh block="Is now H:%hh|,M:00, S:00?"
+    //% weight=87
+    export function CheckTimeHH(hh: number): boolean {
+        if ((DS3231.GetDayTime(RTCEnum.Minute) == 0) && (DS3231.GetDayTime(RTCEnum.Second) == 0)) {
+            if (DS3231.GetDayTime(RTCEnum.Hour) == hh) {
+                return true
+            }
+            else {
+                return false
+            }
+        }
+        else {
+            return false
+        }
+    }
+
 
 
 
